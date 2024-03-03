@@ -2,6 +2,7 @@
   hosts: podman
   tasks:
     - name: Update apk
+      become: true
       ansible.builtin.apt:
         update_cache: yes
 - name: install packages
@@ -9,6 +10,7 @@
   tasks:
     - name: install packages
       ansible.builtin.apt: name={{ item }} update_cache=yes state=latest
+      become: true
       with_items:
         - git
         - vim
