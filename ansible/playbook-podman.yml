@@ -1,0 +1,39 @@
+- name: Update repositories
+  hosts: podman
+  tasks:
+    - name: Update apk
+      ansible.builtin.apt:
+        update_cache: yes
+- name: install packages
+  hosts: podman
+  tasks:
+    - name: install packages
+      ansible.builtin.apt: name={{ item }} update_cache=yes state=latest
+      with_items:
+        - git
+        - vim
+        - podman
+- name: Pull Podman image and Run it 
+  hosts: podman
+  vars_files:
+    - "{{ playbook_dir }}/vars/azr_vars.yml"
+  tasks:
+    - name: Login to registry AZR gauladell
+      containers.podman.podman_login:
+        username: "{{ AZR_USER }}"
+        password: "{{ AZR_TOKEN }}"
+        registry: "{{ AZR_REGISTRY }}"
+    - name: Pull image from registry
+      podman_image:
+         name: "{{ AZR_IMAGE }}"
+         tag: "{{ AZR_TAG }}"
+
+    - name: Running httpd image.
+      containers.podman.podman_container:
+        name:  "cp2-podman-app"
+        image: "{{ AZR_IMAGE }}:{{ AZR_TAG }}"
+        ports:
+          - "80:80"        
+        state: started
+   
+         
