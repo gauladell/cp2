@@ -29,13 +29,22 @@
       podman_image:
          name: "{{ AZR_IMAGE }}"
          tag: "{{ AZR_TAG }}"
-
+    - name: "Allow the nginx container to run in the 80 port of the host"
+      become: true
+      become_user: root
+      become_method: sudo
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_unprivileged_port_start
+        value: "80"
+        sysctl_set: true
+        reload: true
     - name: Running httpd image.
       containers.podman.podman_container:
         name:  "cp2-podman-app"
         image: "{{ AZR_IMAGE }}:{{ AZR_TAG }}"
         ports:
-          - "80:80"        
+          - "80:80"
+          - "443:443"       
         state: started
    
          
