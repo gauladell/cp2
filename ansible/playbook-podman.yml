@@ -27,8 +27,15 @@
         registry: "{{ AZR_REGISTRY }}"
     - name: Pull image from registry
       podman_image:
-         name: "{{ AZR_IMAGE }}"
-         tag: "{{ AZR_TAG }}"
+         name: docker.io/nginx
+    - name: Push image to registry 
+      podman_image:
+         name: nginx
+         push: true
+         username: "{{ AZR_USER }}"
+         password: "{{ AZR_TOKEN }}"
+         push_args:
+           dest: "{{ AZR_REGISTRY}}/nginx"
     - name: "Allow the nginx container to run in the 80 port of the host"
       become: true
       become_user: root
@@ -41,10 +48,12 @@
     - name: Running httpd image.
       containers.podman.podman_container:
         name:  "cp2-podman-app"
-        image: "{{ AZR_IMAGE }}:{{ AZR_TAG }}"
+        image: "{{ AZR_IMAGE }}"
         ports:
           - "80:80"
           - "443:443"       
         state: started
+        generate_systemd:
+          restart_policy: always
    
          
