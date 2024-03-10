@@ -49,6 +49,7 @@
       containers.podman.podman_container:
         name:  "cp2-podman-app"
         image: "{{ AZR_IMAGE }}"
+        privileged: true
         ports:
           - "80:80"
           - "443:443"       

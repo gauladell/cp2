@@ -23,7 +23,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   location            = azurerm_resource_group.gauladell-rg.location
   resource_group_name = azurerm_resource_group.gauladell-rg.name
   dns_prefix          = "${random_pet.prefix.id}-k8s"
-  kubernetes_version  = "1.29"
+  kubernetes_version  = "1.27"
  
 
   linux_profile {
@@ -52,6 +52,5 @@ resource "azurerm_kubernetes_cluster" "aks" {
   tags = {
     environment = "CP2"
   }
-
-
 }
+

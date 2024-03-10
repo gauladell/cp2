@@ -4,4 +4,5 @@ resource "azurerm_container_registry" "acr" {
   location            = azurerm_resource_group.gauladell-rg.location
   sku                 = "Standard"
   admin_enabled       = false
+  anonymous_pull_enabled = true
 }
